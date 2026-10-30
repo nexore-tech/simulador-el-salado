@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simulador Planta El Salado</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="acceso" id="acceso">
+  <div class="acceso-caja">
+    <span class="eyebrow">Goldberg Resources</span>
+    <h1>Simulador Planta El Salado</h1>
+    <p class="muted" id="acceso-texto">Entra con tu cuenta de Google autorizada.</p>
+    <div class="error" id="acceso-error" hidden></div>
+    <button id="btn-entrar" class="primary" hidden>Entrar con Google</button>
+    <p class="nota-acceso">Se registra quién entra y cuándo. <a href="privacidad.html">Política de privacidad</a>.</p>
+  </div>
+</div>
+
+<div id="app" hidden>
+<header class="top">
+  <div>
+    <h1>Simulador Planta El Salado</h1>
+    <p class="sub" id="sub">Planta RioSal · lixiviación por agitación + precipitación · Chañaral, Atacama</p>
+  </div>
+  <div class="top-actions">
+    <button id="btn-autollenar" class="primary">Repartir capacidad</button>
+    <button id="btn-limpiar">Vaciar plan</button>
+    <button id="btn-csv">Exportar CSV</button>
+    <button id="btn-reset" title="Volver a los parámetros por defecto">Restablecer</button>
+    <span class="usuario"><span id="usuario-nombre"></span><a href="admin.html" id="link-admin" hidden>Usuarios</a><button id="btn-salir">Salir</button></span>
+  </div>
+</header>
+
+<main class="layout">
+  <aside class="panel" id="panel">
+    <!-- se llena desde app.js -->
+  </aside>
+
+  <section class="centro">
+    <div class="kpis" id="kpis"></div>
+    <div class="mapa-wrap">
+      <div id="mapa"></div>
+      <div class="leyenda" id="leyenda"></div>
+    </div>
+    <div class="balance" id="candidatas"></div>
+    <section class="ficha" id="ficha"></section>
+    <div class="bandas" id="bandas"></div>
+    <div class="balance" id="balance"></div>
+    <div class="tabla-wrap">
+      <div class="tabla-head">
+        <h2>Faenas en el radio</h2>
+        <input id="buscar" type="search" placeholder="Buscar faena, empresa o comuna">
+        <label class="chk"><input type="checkbox" id="solo-plan"> Solo las del plan</label>
+        <span id="conteo" class="muted"></span>
+      </div>
+      <div class="tabla-scroll"><table id="tabla"></table></div>
+    </div>
+    <p class="nota" id="nota"></p>
+  </section>
+</main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="app.js"></script>
+<script type="module" src="main.js"></script>
+</body>
+</html>

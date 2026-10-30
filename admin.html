@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Usuarios y datos — Simulador El Salado</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="top">
+  <div>
+    <h1>Usuarios y datos</h1>
+    <p class="sub">Simulador Planta El Salado · administración</p>
+  </div>
+  <div class="top-actions">
+    <a href="index.html" class="boton">Volver al simulador</a>
+    <span class="usuario"><span id="usuario-nombre"></span><button id="btn-salir">Salir</button></span>
+  </div>
+</header>
+
+<main class="admin">
+  <div class="aviso" id="aviso" hidden></div>
+  <div class="error" id="error" hidden></div>
+  <p class="muted" id="estado">Verificando acceso…</p>
+
+  <div id="contenido" hidden>
+    <section class="tarjeta">
+      <h2>Agregar usuario</h2>
+      <form id="f-agregar" class="fila-form">
+        <label>Correo de Google <input type="email" id="nuevo-correo" required placeholder="nombre@gmail.com"></label>
+        <label>Nombre <input type="text" id="nuevo-nombre" maxlength="80"></label>
+        <label>Rol <select id="nuevo-rol"><option value="usuario">Usuario</option><option value="admin">Administrador</option></select></label>
+        <button type="submit" class="primary">Agregar</button>
+      </form>
+      <p class="muted">La persona entra con "Entrar con Google" usando ese correo. Los administradores además gestionan usuarios y datos.
+        Un usuario desactivado pierde el acceso a los datos de inmediato y su página se cierra en menos de 5 minutos.</p>
+    </section>
+
+    <section class="tarjeta">
+      <h2 id="titulo-usuarios">Usuarios</h2>
+      <div class="tabla-scroll"><table id="tabla-usuarios"></table></div>
+    </section>
+
+    <section class="tarjeta">
+      <h2>Datos del simulador</h2>
+      <p id="meta-datos" class="muted"></p>
+      <form id="f-datos" class="fila-form">
+        <label>Archivo <input type="file" id="archivo-datos" accept=".json,application/json" required></label>
+        <button type="submit" class="primary">Subir datos</button>
+      </form>
+      <p class="muted">Sube <code>data/datos_salado.json</code>, que genera <code>tools/preparar_datos_salado.py</code> en el equipo de trabajo.
+        Reemplaza los datos actuales para todos los usuarios.</p>
+    </section>
+
+    <section class="tarjeta">
+      <h2>Registro de accesos</h2>
+      <div class="tabla-scroll"><table id="tabla-accesos"></table></div>
+    </section>
+  </div>
+</main>
+<script type="module" src="admin.js"></script>
+</body>
+</html>

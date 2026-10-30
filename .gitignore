@@ -1,0 +1,7 @@
+# Datos y herramientas de trabajo: NO se publican (los datos viven en Firestore)
+data/
+tools/
+dist/
+local.html
+LEEME.txt
+__pycache__/

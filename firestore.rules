@@ -1,0 +1,63 @@
+rules_version = '2';
+
+// Reglas de Firestore del Simulador Planta El Salado.
+// Se pegan en Consola de Firebase → Firestore Database → Reglas → Publicar.
+//
+// - Solo entran usuarios de usuarios/{correo} con activo == true.
+// - Solo los administradores ven y modifican la lista de usuarios, suben datos y leen el registro.
+// - Un administrador no puede desactivarse, quitarse el rol ni eliminarse: siempre queda al menos uno.
+// - El propietario puede crearse a sí mismo como administrador (primer ingreso o recuperación).
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function verificado() {
+      return request.auth != null && request.auth.token.email_verified == true;
+    }
+    function correo() {
+      return request.auth.token.email.lower();
+    }
+    function propietario() {
+      return verificado() && correo() == 'jc.maurelia@gmail.com';
+    }
+    function ficha() {
+      return get(/databases/$(database)/documents/usuarios/$(correo())).data;
+    }
+    function autorizado() {
+      return verificado() && exists(/databases/$(database)/documents/usuarios/$(correo())) && ficha().activo == true;
+    }
+    function admin() {
+      return autorizado() && ficha().rol == 'admin';
+    }
+    function fichaValida(d) {
+      return d.keys().hasOnly(['nombre', 'rol', 'activo', 'agregado', 'por'])
+        && d.nombre is string && d.nombre.size() <= 80
+        && d.rol in ['admin', 'usuario']
+        && d.activo is bool;
+    }
+
+    match /usuarios/{c} {
+      allow get: if verificado() && (c == correo() || admin());
+      allow list: if admin();
+      allow create: if fichaValida(request.resource.data) && c == c.lower()
+        && (admin() || (propietario() && c == correo() && request.resource.data.rol == 'admin' && request.resource.data.activo == true));
+      allow update: if admin() && fichaValida(request.resource.data)
+        && (c != correo() || (request.resource.data.rol == 'admin' && request.resource.data.activo == true));
+      allow delete: if admin() && c != correo();
+    }
+
+    match /datos/{d} {
+      allow read: if autorizado();
+      allow write: if admin();
+    }
+
+    match /accesos/{a} {
+      allow create: if autorizado()
+        && request.resource.data.keys().hasOnly(['correo', 'tipo', 't', 'ua'])
+        && request.resource.data.correo == correo()
+        && request.resource.data.tipo in ['entrada', 'salida']
+        && request.resource.data.t == request.time
+        && request.resource.data.ua is string && request.resource.data.ua.size() <= 200;
+      allow read: if admin();
+    }
+  }
+}
