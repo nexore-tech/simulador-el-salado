@@ -12,9 +12,27 @@ Publicado en GitHub Pages: <https://nexore-tech.github.io/simulador-el-salado/>
 - Los datos del simulador **no están en este repositorio**: viven en Firestore (`datos/`) y las reglas
   (`firestore.rules`) solo dejan leerlos a usuarios activos. Este repositorio es público: contiene solo el código.
 
-## Puesta en marcha de Firebase (una vez)
+## Proyecto Firebase
 
-1. <https://console.firebase.google.com> → **Agregar proyecto** → nombre `simulador-el-salado` → sin Google Analytics.
+| | |
+|---|---|
+| Proyecto | `simulador-el-salado` (n.º 899742078264), plan Spark (gratuito) |
+| Consola | <https://console.firebase.google.com/project/simulador-el-salado> |
+| Authentication | Proveedor **Google**; dominio autorizado `nexore-tech.github.io`; nombre público "Simulador El Salado" |
+| Firestore | Base `(default)`, edición Standard, `southamerica-west1` (Santiago); reglas = `firestore.rules` |
+| App web | `simulador` → valores en `firebase-config.js` |
+| Google Analytics | No se usa (desvinculado) |
+
+Colecciones: `usuarios/{correo}` (rol `admin` o `usuario`, `activo`), `datos/meta` + `datos/parte_NN` (JSON del simulador
+en partes de ~600 mil caracteres) y `accesos/` (entradas y salidas).
+
+Si se cambia `firestore.rules`, hay que pegarlo de nuevo en **Firestore → Reglas → Publicar**: el repositorio no lo despliega solo.
+
+## Crear el proyecto Firebase desde cero
+
+Ya está hecho; estos pasos sirven solo para recrearlo en otro proyecto.
+
+1. <https://console.firebase.google.com> → **Agregar proyecto** → nombre `simulador-el-salado` → sin Gemini ni Google Analytics.
 2. **Compilación → Authentication → Comenzar** → *Método de acceso* → **Google** → Habilitar → correo de asistencia → Guardar.
 3. **Authentication → Configuración → Dominios autorizados** → **Agregar dominio** → `nexore-tech.github.io`.
 4. **Compilación → Firestore Database → Crear base de datos** → ubicación `southamerica-west1` (Santiago) → *modo de producción*.
