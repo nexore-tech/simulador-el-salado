@@ -999,6 +999,23 @@
     setTimeout(() => URL.revokeObjectURL(a.href), 1000);
   }
 
+  // Exporta el plan a Excel con fórmulas paso a paso (excel.js)
+  async function exportarExcel() {
+    const b = $("btn-xlsx"), txt = b.textContent;
+    b.disabled = true; b.textContent = "Generando…";
+    try {
+      const r = simular(); r.leyEq = leyEquilibrioPlan(r);
+      const filas = D.minas.filter(m => plan.has(m.id)).map(m => {
+        const e = evaluar(m);
+        return { m, e, tipo: tipoPrincipal(m), leq: leyEquilibrio(m, e.t, "margenNeto") };
+      });
+      await window.exportarExcelSalado({ P: clonar(P), r, filas, MENAS, TIPOS, ESTADOS, LB_T,
+        ripios: economia(P.ripiosLey, P.ripiosRec), generado: D.generado });
+    } catch (e) {
+      alert("No se pudo generar el Excel: " + e.message);
+    } finally { b.disabled = false; b.textContent = txt; }
+  }
+
   // ---------------- render ----------------
   function render() {
     const lista = D.minas.filter(m => pasaFiltro(m) || plan.has(m.id));
@@ -1030,6 +1047,7 @@
     $("btn-autollenar").onclick = autollenar;
     $("btn-limpiar").onclick = () => { plan = new Set(); render(); };
     $("btn-csv").onclick = exportarCSV;
+    $("btn-xlsx").onclick = exportarExcel;
     $("btn-reset").onclick = () => { P = clonar(DEF); ov = {}; panel(); fichaCompleta(); render(); };
     $("nota").innerHTML = `Fuentes: ${esc(D.fuentes)}. Datos generados el ${esc(D.generado)}. ${fmt(D.minas.length)} faenas de Cu/Au/Ag
       (regiones II–IV) con ruta a la planta a menos de 350 km. La distancia "por camino" es la ruta más corta por la red MOP más el tramo en

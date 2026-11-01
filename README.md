@@ -57,3 +57,13 @@ y subir ese archivo en `admin.html` → *Datos del simulador*.
 ## Uso sin conexión
 
 `local.html` (no publicado) abre el simulador con `data/datos_salado.js` sin login, solo en el equipo de trabajo.
+
+## Exportar a Excel
+
+El botón **Exportar Excel** genera `plan_el_salado_AAAA-MM-DD.xlsx` en el navegador (librería ExcelJS 4.4.0 desde cdnjs, se carga
+solo al exportar). El libro trae el plan con **fórmulas**, no valores: hoja *Parámetros* (cada supuesto con nombre, p. ej. `Precio_Cu`),
+*Minas* (una columna por faena, una fila por paso del cálculo) y *Balance* (balance mensual e indicadores, con una columna que compara
+contra el valor del simulador). El libro incluye valores contractuales de la planta: es de uso interno.
+
+`excel.js` replica en fórmulas el motor de `app.js` (`economia`, `evaluar`, `simular`): **si se cambia el motor, hay que cambiar también
+`excel.js`**. Para verificar, exportar un plan y revisar que la columna *Diferencia* de la hoja *Balance* quede en 0 al abrirlo en Excel.
